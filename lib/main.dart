@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,12 +9,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+  Text returnText(String texto) {
+    return Text(texto,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 162, 108, 255)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Calculadora de IMC'),
@@ -33,6 +40,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController controllerPeso = TextEditingController();
   TextEditingController controllerAltura = TextEditingController();
+  var dataNascimentoController = TextEditingController(text: '');
   String resultadoImc = "";
   String feedbackImc = "";
 
@@ -41,7 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(widget.title,
+            style: GoogleFonts.dmSans(
+                fontWeight: FontWeight.w600, color: Colors.deepPurple)),
         centerTitle: true,
       ),
       body: Center(
@@ -50,8 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const Icon(
+                Icons.health_and_safety_sharp,
+                size: 30,
+                color: Color.fromARGB(255, 107, 50, 206),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               const Text(
                 'Calculadora de IMC:',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 53, 53, 53),
+                    fontWeight: FontWeight.w700),
               ),
               const SizedBox(
                 height: 16,
@@ -78,6 +99,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         borderRadius: BorderRadius.all(Radius.circular(8.0)))),
               ),
               const SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                keyboardType: const TextInputType.numberWithOptions(),
+                controller: dataNascimentoController,
+                decoration: const InputDecoration(
+                    labelText: 'Data de nascimento',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)))),
+                onTap: () async {
+                  var data = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(1950, 01, 01),
+                    firstDate: DateTime(1999, 01, 01),
+                    lastDate: DateTime(2050, 12, 31),
+                  );
+                  if (data != null) {
+                    dataNascimentoController.text = data.toString();
+                  }
+                },
+              ),
+              const SizedBox(
                 height: 32,
               ),
               Text(
@@ -96,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.deepPurple),
               ),
               const SizedBox(
-                height: 16,
+                height: 8,
               ),
               SizedBox(
                   width: 200,
